@@ -1,0 +1,264 @@
+metrics:
+  # Basic Performance Metrics
+  - key: builtin:synthetic.browser.actionDuration.load
+    description: ページ読み込み時間（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.actionDuration.load.geo
+    description: ページ読み込み時間：地域別（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.firstByte.load
+    description: 初回バイト受信時間（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.firstByte.load.geo
+    description: 初回バイト受信時間：地域別（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.speedIndex.load
+    description: スピードインデックス
+    category: Basic Performance
+  - key: builtin:synthetic.browser.speedIndex.load.geo
+    description: スピードインデックス：地域別
+    category: Basic Performance
+  - key: builtin:synthetic.browser.visuallyComplete.load
+    description: 表示完了時間（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.visuallyComplete.load.geo
+    description: 表示完了時間：地域別（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.domInteractive.load
+    description: DOM操作可能時間（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.domInteractive.load.geo
+    description: DOM操作可能時間：地域別（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.totalDuration
+    description: 総実行時間（ms）
+    category: Basic Performance
+  - key: builtin:synthetic.browser.totalDuration.geo
+    description: 総実行時間：地域別（ms）
+    category: Basic Performance
+
+  # Core Web Vitals
+  - key: builtin:synthetic.browser.cumulativeLayoutShift.load
+    description: CLS：累積レイアウトシフト
+    category: Core Web Vitals
+  - key: builtin:synthetic.browser.cumulativeLayoutShift.load.geo
+    description: CLS：累積レイアウトシフト：地域別
+    category: Core Web Vitals
+  - key: builtin:synthetic.browser.largestContentfulPaint.load
+    description: LCP：最大コンテンツ描画時間（ms）
+    category: Core Web Vitals
+  - key: builtin:synthetic.browser.largestContentfulPaint.load.geo
+    description: LCP：最大コンテンツ描画時間：地域別（ms）
+    category: Core Web Vitals
+
+  # Network Performance
+  - key: builtin:synthetic.browser.networkContribution.load
+    description: ネットワーク処理時間（ms）
+    category: Network Performance
+  - key: builtin:synthetic.browser.networkContribution.load.geo
+    description: ネットワーク処理時間：地域別（ms）
+    category: Network Performance
+  - key: builtin:synthetic.browser.serverContribution.load
+    description: サーバー処理時間（ms）
+    category: Network Performance
+  - key: builtin:synthetic.browser.serverContribution.load.geo
+    description: サーバー処理時間：地域別（ms）
+    category: Network Performance
+  - key: builtin:synthetic.browser.responseEnd.load
+    description: レスポンス終了時間（ms）
+    category: Network Performance
+  - key: builtin:synthetic.browser.responseEnd.load.geo
+    description: レスポンス終了時間：地域別（ms）
+    category: Network Performance
+
+  # Load Events
+  - key: builtin:synthetic.browser.loadEventEnd.load
+    description: ロードイベント終了時間（ms）
+    category: Load Events
+  - key: builtin:synthetic.browser.loadEventEnd.load.geo
+    description: ロードイベント終了時間：地域別（ms）
+    category: Load Events
+  - key: builtin:synthetic.browser.loadEventStart.load
+    description: ロードイベント開始時間（ms）
+    category: Load Events
+  - key: builtin:synthetic.browser.loadEventStart.load.geo
+    description: ロードイベント開始時間：地域別（ms）
+    category: Load Events
+
+  # Availability & Success/Failure
+  - key: builtin:synthetic.browser.availability
+    description: 可用性（%）
+    category: Availability
+  - key: builtin:synthetic.browser.availability.location.total
+    description: 可用性：全ロケーション（%）
+    category: Availability
+  - key: builtin:synthetic.browser.availability.location.totalWoMaintenanceWindow
+    description: 可用性：メンテ除外（%）
+    category: Availability
+  - key: builtin:synthetic.browser.success
+    description: 成功回数
+    category: Availability
+  - key: builtin:synthetic.browser.success.geo
+    description: 成功回数：地域別
+    category: Availability
+  - key: builtin:synthetic.browser.failure
+    description: 失敗回数
+    category: Availability
+  - key: builtin:synthetic.browser.failure.geo
+    description: 失敗回数：地域別
+    category: Availability
+  - key: builtin:synthetic.browser.total
+    description: 総実行回数
+    category: Availability
+    aggregation: counter
+  - key: builtin:synthetic.browser.total.geo
+    description: 総実行回数：地域別
+    category: Availability
+    aggregation: counter
+
+# ソート設定
+sort_settings:
+  primary_key: monitor_name
+  secondary_keys:
+    - metric_category
+    - location
+  
+  # メトリクスカテゴリーの表示順
+  category_order:
+    - Availability
+    - Basic Performance
+    - Core Web Vitals
+    - Network Performance
+    - Load Events
+
+  # 同一カテゴリー内のメトリクス表示順
+  metric_order:
+    Availability:
+      - builtin:synthetic.browser.total
+      - builtin:synthetic.browser.total.geo
+      - builtin:synthetic.browser.availability
+      - builtin:synthetic.browser.availability.location.total
+      - builtin:synthetic.browser.availability.location.totalWoMaintenanceWindow
+      - builtin:synthetic.browser.success
+      - builtin:synthetic.browser.success.geo
+      - builtin:synthetic.browser.failure
+      - builtin:synthetic.browser.failure.geo
+    Basic Performance:
+      - builtin:synthetic.browser.actionDuration.load
+      - builtin:synthetic.browser.actionDuration.load.geo
+      - builtin:synthetic.browser.firstByte.load
+      - builtin:synthetic.browser.firstByte.load.geo
+      - builtin:synthetic.browser.speedIndex.load
+      - builtin:synthetic.browser.speedIndex.load.geo
+      - builtin:synthetic.browser.visuallyComplete.load
+      - builtin:synthetic.browser.visuallyComplete.load.geo
+      - builtin:synthetic.browser.domInteractive.load
+      - builtin:synthetic.browser.domInteractive.load.geo
+      - builtin:synthetic.browser.totalDuration
+      - builtin:synthetic.browser.totalDuration.geo
+    Core Web Vitals:
+      - builtin:synthetic.browser.cumulativeLayoutShift.load
+      - builtin:synthetic.browser.cumulativeLayoutShift.load.geo
+      - builtin:synthetic.browser.largestContentfulPaint.load
+      - builtin:synthetic.browser.largestContentfulPaint.load.geo
+    Network Performance:
+      - builtin:synthetic.browser.networkContribution.load
+      - builtin:synthetic.browser.networkContribution.load.geo
+      - builtin:synthetic.browser.serverContribution.load
+      - builtin:synthetic.browser.serverContribution.load.geo
+      - builtin:synthetic.browser.responseEnd.load
+      - builtin:synthetic.browser.responseEnd.load.geo
+    Load Events:
+      - builtin:synthetic.browser.loadEventEnd.load
+      - builtin:synthetic.browser.loadEventEnd.load.geo
+      - builtin:synthetic.browser.loadEventStart.load
+      - builtin:synthetic.browser.loadEventStart.load.geo
+
+time_metrics_keywords:
+  - duration
+  - time
+  - byte
+  - paint
+  - complete
+  - interactive
+  - contribution
+  - response
+  - event
+  - index
+
+defaults:
+  monitor:
+    type: BROWSER
+    interval: 15  # minutes
+    resolution: 15m  # 15m, 30m, 1h
+    location: DEFAULT
+
+  api:
+    request_interval: 100  # ms
+    timeout: 30  # seconds
+
+  output:
+    time_unit: ms  # ms/s
+    encoding: utf8-bom  # utf8-bom/sjis
+    time_range:
+      min: 24  # hours
+      max: 120  # hours
+
+  fallback:
+    stats:
+      default: 0.0
+    location: DEFAULT
+
+# 出力フォーマット設定
+output_format:
+  csv:
+    columns:
+      - key: monitor_name
+        display_name: モニター名
+        order: 1
+      - key: frequency
+        display_name: 監視間隔(h)
+        order: 2
+      - key: device
+        display_name: デバイス
+        order: 3
+      - key: location
+        display_name: ロケーション
+        order: 4
+      - key: metric_name
+        display_name: メトリクス名
+        order: 5
+      - key: metric_description
+        display_name: メトリクス説明
+        order: 6
+      - key: min
+        display_name: Min
+        order: 7
+      - key: max
+        display_name: Max
+        order: 8
+      - key: avg
+        display_name: Avg
+        order: 9
+      - key: median
+        display_name: Median
+        order: 10
+      - key: stdev
+        display_name: Stdev
+        order: 11
+      - key: tags
+        display_name: タグ
+        order: 12
+
+  time_metrics:
+    keywords:
+      - duration
+      - time
+      - byte
+      - paint
+      - complete
+      - interactive
+      - contribution
+      - response
+      - event
+      - index 
