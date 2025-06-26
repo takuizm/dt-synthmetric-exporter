@@ -3,118 +3,118 @@ metrics:
   - key: builtin:synthetic.browser.actionDuration.load
     description: ページ読み込み時間（ms）
     category: Basic Performance
-  - key: builtin:synthetic.browser.actionDuration.load.geo
-    description: ページ読み込み時間：地域別（ms）
-    category: Basic Performance
+  # - key: builtin:synthetic.browser.actionDuration.load.geo
+  #   description: ページ読み込み時間：地域別（ms）
+  #   category: Basic Performance
   - key: builtin:synthetic.browser.firstByte.load
     description: 初回バイト受信時間（ms）
     category: Basic Performance
-  - key: builtin:synthetic.browser.firstByte.load.geo
-    description: 初回バイト受信時間：地域別（ms）
-    category: Basic Performance
+  # - key: builtin:synthetic.browser.firstByte.load.geo
+  #   description: 初回バイト受信時間：地域別（ms）
+  #   category: Basic Performance
   - key: builtin:synthetic.browser.speedIndex.load
     description: スピードインデックス
     category: Basic Performance
-  - key: builtin:synthetic.browser.speedIndex.load.geo
-    description: スピードインデックス：地域別
-    category: Basic Performance
-  - key: builtin:synthetic.browser.visuallyComplete.load
-    description: 表示完了時間（ms）
-    category: Basic Performance
-  - key: builtin:synthetic.browser.visuallyComplete.load.geo
-    description: 表示完了時間：地域別（ms）
-    category: Basic Performance
-  - key: builtin:synthetic.browser.domInteractive.load
-    description: DOM操作可能時間（ms）
-    category: Basic Performance
-  - key: builtin:synthetic.browser.domInteractive.load.geo
-    description: DOM操作可能時間：地域別（ms）
-    category: Basic Performance
-  - key: builtin:synthetic.browser.totalDuration
-    description: 総実行時間（ms）
-    category: Basic Performance
-  - key: builtin:synthetic.browser.totalDuration.geo
-    description: 総実行時間：地域別（ms）
-    category: Basic Performance
+  # - key: builtin:synthetic.browser.speedIndex.load.geo
+  #   description: スピードインデックス：地域別
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.visuallyComplete.load
+  #   description: 表示完了時間（ms）
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.visuallyComplete.load.geo
+  #   description: 表示完了時間：地域別（ms）
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.domInteractive.load
+  #   description: DOM操作可能時間（ms）
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.domInteractive.load.geo
+  #   description: DOM操作可能時間：地域別（ms）
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.totalDuration
+  #   description: 総実行時間（ms）
+  #   category: Basic Performance
+  # - key: builtin:synthetic.browser.totalDuration.geo
+  #   description: 総実行時間：地域別（ms）
+  #   category: Basic Performance
 
   # Core Web Vitals
   - key: builtin:synthetic.browser.cumulativeLayoutShift.load
     description: CLS：累積レイアウトシフト
     category: Core Web Vitals
-  - key: builtin:synthetic.browser.cumulativeLayoutShift.load.geo
-    description: CLS：累積レイアウトシフト：地域別
-    category: Core Web Vitals
+  # - key: builtin:synthetic.browser.cumulativeLayoutShift.load.geo
+  #   description: CLS：累積レイアウトシフト：地域別
+  #   category: Core Web Vitals
   - key: builtin:synthetic.browser.largestContentfulPaint.load
     description: LCP：最大コンテンツ描画時間（ms）
     category: Core Web Vitals
-  - key: builtin:synthetic.browser.largestContentfulPaint.load.geo
-    description: LCP：最大コンテンツ描画時間：地域別（ms）
-    category: Core Web Vitals
+  # - key: builtin:synthetic.browser.largestContentfulPaint.load.geo
+  #   description: LCP：最大コンテンツ描画時間：地域別（ms）
+  #   category: Core Web Vitals
 
   # Network Performance
-  - key: builtin:synthetic.browser.networkContribution.load
-    description: ネットワーク処理時間（ms）
-    category: Network Performance
-  - key: builtin:synthetic.browser.networkContribution.load.geo
-    description: ネットワーク処理時間：地域別（ms）
-    category: Network Performance
-  - key: builtin:synthetic.browser.serverContribution.load
-    description: サーバー処理時間（ms）
-    category: Network Performance
-  - key: builtin:synthetic.browser.serverContribution.load.geo
-    description: サーバー処理時間：地域別（ms）
-    category: Network Performance
-  - key: builtin:synthetic.browser.responseEnd.load
-    description: レスポンス終了時間（ms）
-    category: Network Performance
-  - key: builtin:synthetic.browser.responseEnd.load.geo
-    description: レスポンス終了時間：地域別（ms）
-    category: Network Performance
+  # - key: builtin:synthetic.browser.networkContribution.load
+  #   description: ネットワーク処理時間（ms）
+  #   category: Network Performance
+  # - key: builtin:synthetic.browser.networkContribution.load.geo
+  #   description: ネットワーク処理時間：地域別（ms）
+  #   category: Network Performance
+  # - key: builtin:synthetic.browser.serverContribution.load
+  #   description: サーバー処理時間（ms）
+  #   category: Network Performance
+  # - key: builtin:synthetic.browser.serverContribution.load.geo
+  #   description: サーバー処理時間：地域別（ms）
+  #   category: Network Performance
+  # - key: builtin:synthetic.browser.responseEnd.load
+  #   description: レスポンス終了時間（ms）
+  #   category: Network Performance
+  # - key: builtin:synthetic.browser.responseEnd.load.geo
+  #   description: レスポンス終了時間：地域別（ms）
+  #   category: Network Performance
 
   # Load Events
-  - key: builtin:synthetic.browser.loadEventEnd.load
-    description: ロードイベント終了時間（ms）
-    category: Load Events
-  - key: builtin:synthetic.browser.loadEventEnd.load.geo
-    description: ロードイベント終了時間：地域別（ms）
-    category: Load Events
-  - key: builtin:synthetic.browser.loadEventStart.load
-    description: ロードイベント開始時間（ms）
-    category: Load Events
-  - key: builtin:synthetic.browser.loadEventStart.load.geo
-    description: ロードイベント開始時間：地域別（ms）
-    category: Load Events
+  # - key: builtin:synthetic.browser.loadEventEnd.load
+  #   description: ロードイベント終了時間（ms）
+  #   category: Load Events
+  # - key: builtin:synthetic.browser.loadEventEnd.load.geo
+  #   description: ロードイベント終了時間：地域別（ms）
+  #   category: Load Events
+  # - key: builtin:synthetic.browser.loadEventStart.load
+  #   description: ロードイベント開始時間（ms）
+  #   category: Load Events
+  # - key: builtin:synthetic.browser.loadEventStart.load.geo
+  #   description: ロードイベント開始時間：地域別（ms）
+  #   category: Load Events
 
   # Availability & Success/Failure
   - key: builtin:synthetic.browser.availability
     description: 可用性（%）
     category: Availability
-  - key: builtin:synthetic.browser.availability.location.total
-    description: 可用性：全ロケーション（%）
-    category: Availability
-  - key: builtin:synthetic.browser.availability.location.totalWoMaintenanceWindow
-    description: 可用性：メンテ除外（%）
-    category: Availability
-  - key: builtin:synthetic.browser.success
-    description: 成功回数
-    category: Availability
-  - key: builtin:synthetic.browser.success.geo
-    description: 成功回数：地域別
-    category: Availability
-  - key: builtin:synthetic.browser.failure
-    description: 失敗回数
-    category: Availability
-  - key: builtin:synthetic.browser.failure.geo
-    description: 失敗回数：地域別
-    category: Availability
-  - key: builtin:synthetic.browser.total
-    description: 総実行回数
-    category: Availability
-    aggregation: counter
-  - key: builtin:synthetic.browser.total.geo
-    description: 総実行回数：地域別
-    category: Availability
-    aggregation: counter
+  # - key: builtin:synthetic.browser.availability.location.total
+  #   description: 可用性：全ロケーション（%）
+  #   category: Availability
+  # - key: builtin:synthetic.browser.availability.location.totalWoMaintenanceWindow
+  #   description: 可用性：メンテ除外（%）
+  #   category: Availability
+  # - key: builtin:synthetic.browser.success
+  #   description: 成功回数
+  #   category: Availability
+  # - key: builtin:synthetic.browser.success.geo
+  #   description: 成功回数：地域別
+  #   category: Availability
+  # - key: builtin:synthetic.browser.failure
+  #   description: 失敗回数
+  #   category: Availability
+  # - key: builtin:synthetic.browser.failure.geo
+  #   description: 失敗回数：地域別
+  #   category: Availability
+  # - key: builtin:synthetic.browser.total
+  #   description: 総実行回数
+  #   category: Availability
+  #   aggregation: counter
+  # - key: builtin:synthetic.browser.total.geo
+  #   description: 総実行回数：地域別
+  #   category: Availability
+  #   aggregation: counter
 
 # ソート設定
 sort_settings:
@@ -122,7 +122,7 @@ sort_settings:
   secondary_keys:
     - metric_category
     - location
-  
+
   # メトリクスカテゴリーの表示順
   category_order:
     - Availability
@@ -177,14 +177,40 @@ sort_settings:
 time_metrics_keywords:
   - duration
   - time
-  - byte
-  - paint
   - complete
   - interactive
   - contribution
   - response
   - event
   - index
+
+# 評価基準値設定
+evaluation_criteria:
+  # 基準値（秒単位、時間メトリクス）
+  time_thresholds:
+    actionDuration: 2.0      # Action Duration 2.0秒以下
+    actionDuration_strict: 1.0  # Action Duration 1.0秒以下（厳格基準）
+    visuallyComplete: 1.0    # Visually Complete 1.0秒以下
+    largestContentfulPaint: 2.0  # LCP 2.0秒以下
+    firstByte: 0.2          # Time to first byte 0.2秒以下
+    speedIndex: 0.4         # Speed Index 0.4秒以下
+
+  # 比率・パーセンテージ・無次元スコア系基準値
+  ratio_thresholds:
+    availability: 99.9      # 稼働率 99.9%以上
+    cumulativeLayoutShift: 0.1  # CLS 0.1以下（無次元スコア値）
+
+  # 評価用値の選択（avg, median, maxなど）
+  evaluation_value: "avg"   # 評価に使用する統計値
+
+# Action Durationの2つの基準設定
+action_duration_dual_criteria:
+  - threshold_key: "actionDuration"        # 2.0秒基準
+    display_suffix: "（1）"
+    description: "ページ読み込み時間（秒）- 基準値2.0秒"
+  - threshold_key: "actionDuration_strict" # 1.0秒基準
+    display_suffix: "（2）"
+    description: "ページ読み込み時間（秒）- 基準値1.0秒"
 
 defaults:
   monitor:
@@ -198,7 +224,7 @@ defaults:
     timeout: 30  # seconds
 
   output:
-    time_unit: ms  # ms/s
+    time_unit: s  # ms/s
     encoding: utf8-bom  # utf8-bom/sjis
     time_range:
       min: 24  # hours
@@ -254,11 +280,60 @@ output_format:
     keywords:
       - duration
       - time
-      - byte
-      - paint
       - complete
       - interactive
       - contribution
       - response
       - event
-      - index 
+
+# 出力モード設定
+output_modes:
+  raw:
+    name: "生データ出力"
+    description: "全統計値を含む詳細データを出力"
+  evaluation:
+    name: "評価付き出力"
+    description: "評価値と平均値のみを含む簡潔なデータを出力"
+
+# 評価付きモード用CSV列定義
+csv_columns_evaluation:
+  - key: "code"
+    display_name: "code"
+    order: 1
+    description: "将来の拡張用（現在は空欄）"
+  - key: "corporate"
+    display_name: "corporate"
+    order: 2
+    description: "将来の拡張用（現在は空欄）"
+  - key: "no"
+    display_name: "no"
+    order: 3
+    description: "将来の拡張用（現在は空欄）"
+  - key: "code_no"
+    display_name: "code+no"
+    order: 4
+    description: "将来の拡張用（現在は空欄）"
+  - key: "metric_full_name"
+    display_name: "メトリクス名:説明"
+    order: 5
+    description: "メトリクス名と説明を組み合わせた表示"
+  - key: "evaluation"
+    display_name: "評価"
+    order: 6
+    description: "合格=1、不合格=0、基準値未設定=-1"
+  - key: "avg"
+    display_name: "AVG"
+    order: 7
+    description: "平均値"
+  - key: "url"
+    display_name: "URL"
+    order: 8
+    description: "将来の拡張用（現在は空欄）"
+  - key: "index"
+    display_name: "index"
+    order: 9
+    description: "行番号（1から順番に採番）"
+  - key: "tags"
+    display_name: "タグ"
+    order: 10
+    description: "モニターに設定されたタグ"
