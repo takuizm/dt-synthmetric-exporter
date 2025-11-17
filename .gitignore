@@ -230,3 +230,6 @@ temp_*.py
 data/
 cache/
 tmp/ 
+# Development tools (keep files, but don't track in Git)
+.serena/
+.claude/

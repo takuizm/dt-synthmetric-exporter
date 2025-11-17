@@ -336,7 +336,11 @@ class MetricsDataFrame:
         return description
 
     def convert_units(self, time_unit: str = 'ms') -> 'MetricsDataFrame':
-        """時間単位の変換を行う"""
+        """時間単位の変換を行う
+
+        注意: dynatrace_client.py で既に時間単位の変換が行われているため、
+        このメソッドでは単位変換は行わず、説明文の単位表記のみ更新する。
+        """
         df = self.df.copy()
 
         # 監視間隔を分から時間に変換（生データモードのみ）
@@ -345,38 +349,12 @@ class MetricsDataFrame:
                 lambda x: round(float(x) / 60, 2) if isinstance(x, (int, float)) else x
             )
 
-        # メトリクス定義を取得
-        metrics_def = self.config.get_metrics()
-
-        # 時間系メトリクスの単位変換（ms → s）とメトリクス説明の更新
-        if time_unit == 's':
-            # 数値列のみを対象に変換
-            numeric_columns = df.select_dtypes(include=['int64', 'float64']).columns
-            for col in numeric_columns:
-                if col in ['min', 'max', 'avg', 'median', 'stdev']:
-                    for idx in df.index:
-                        # 評価付きモードかどうかで列名を判定
-                        if 'metric_full_name' in df.columns:
-                            # 評価付きモード: metric_full_nameから推定
-                            metric_full_name = df.loc[idx, 'metric_full_name']
-                            # "メトリクス名:説明"形式からメトリクス名部分を抽出
-                            metric_name = metric_full_name.split(':')[0] if ':' in metric_full_name else metric_full_name
-                        else:
-                            # 生データモード: metric_nameを使用
-                            metric_name = df.loc[idx, 'metric_name']
-
-                        metric_type = self._get_metric_type(metric_name, metrics_def)
-
-                        # 時間系メトリクスのみ変換
-                        if metric_type == 'time':
-                            df.loc[idx, col] = round(df.loc[idx, col] / 1000, 2)
-
-            # メトリクス説明の単位を更新（生データモードのみ）
-            if 'metric_description' in df.columns:
-                df['metric_description'] = df.apply(
-                    lambda row: self._adjust_metric_description(row['metric_description'], time_unit),
-                    axis=1
-                )
+        # メトリクス説明の単位を更新（生データモードのみ）
+        if time_unit == 's' and 'metric_description' in df.columns:
+            df['metric_description'] = df.apply(
+                lambda row: self._adjust_metric_description(row['metric_description'], time_unit),
+                axis=1
+            )
 
         self.df = df
         return self
@@ -480,6 +458,92 @@ class MetricsDataFrame:
         self.df = df
         return self
 
+    def format_for_evaluation_export_excel(self) -> 'MetricsDataFrame':
+        """Excel形式評価付きモード用にデータを整形"""
+        df = self.df.copy()
+
+        # index番号を設定（1から開始）
+        df['index'] = range(1, len(df) + 1)
+
+        # メトリクスと列の対応関係を取得
+        metric_column_mapping = self.config.get_excel_metric_column_mapping()
+
+        # 各メトリクス用の列を初期化（空欄）
+        for column_key in metric_column_mapping.values():
+            df[column_key] = ""
+
+        # 各行について、該当するメトリクスの列にのみ平均値を設定
+        for idx in df.index:
+            if 'metric_full_name' in df.columns:
+                # 評価付きモード: metric_full_nameからメトリクス名を抽出
+                metric_full_name = df.loc[idx, 'metric_full_name']
+
+                # 正規表現を使ってメトリクス名を確実に抽出
+                import re
+                if metric_full_name.startswith('builtin:'):
+                    # Action Durationの場合のサフィックス（1）（2）を除去
+                    if '（1）' in metric_full_name or '（2）' in metric_full_name:
+                        metric_name = 'builtin:synthetic.browser.actionDuration.load'
+                    else:
+                        # "builtin:synthetic.browser.xxxxx.load:説明"から"builtin:synthetic.browser.xxxxx.load"を抽出
+                        pattern = r'^(builtin:synthetic\.browser\.[^:]+)'
+                        match = re.match(pattern, metric_full_name)
+                        if match:
+                            metric_name = match.group(1)
+                        else:
+                            # フォールバック: 最初の:で分割
+                            metric_name = metric_full_name.split(':')[0] if ':' in metric_full_name else metric_full_name
+                else:
+                    metric_name = metric_full_name.split(':')[0] if ':' in metric_full_name else metric_full_name
+            else:
+                # 生データモード: metric_nameを使用
+                metric_name = df.loc[idx, 'metric_name']
+
+            # メトリクスに対応する列を特定
+            target_column = metric_column_mapping.get(metric_name)
+            if target_column:
+                # 該当する列に平均値を設定
+                avg_value = df.loc[idx, 'avg']
+                if avg_value is not None and avg_value != "":
+                    df.loc[idx, target_column] = avg_value
+                    logging.debug(f"設定: {metric_name} -> {target_column} = {avg_value}")
+                else:
+                    logging.warning(f"平均値が空です: {metric_name}, avg={avg_value}")
+            else:
+                logging.warning(f"対応する列が見つかりません: {metric_name} (元: {metric_full_name if 'metric_full_name' in df.columns else 'N/A'})")
+
+                # Excel形式専用のソート処理（URL内でのメトリクス順序）
+        excel_order = self.config.get_excel_metric_order()
+        if excel_order:
+            def get_excel_sort_order(metric_full_name):
+                for i, order_def in enumerate(excel_order):
+                    pattern = order_def.get('metric_pattern', '')
+                    if pattern in metric_full_name:
+                        return order_def.get('order', 999)
+                return 999  # 定義されていないメトリクスは最後に
+
+            # monitor_nameでグループ化（同じモニターのデータをグループ化）
+            df['excel_sort_order'] = df['metric_full_name'].apply(get_excel_sort_order)
+            df = df.sort_values(['monitor_name', 'excel_sort_order'])
+            df = df.drop('excel_sort_order', axis=1)
+
+        # Excel形式用の列定義を取得
+        columns = self.config.get_csv_columns_evaluation_excel()
+
+        # 列名を表示名に変換
+        column_mapping = {col['key']: col['display_name'] for col in columns}
+        df = df.rename(columns=column_mapping)
+
+        # 列の順序を設定
+        display_names = [
+            col['display_name']
+            for col in sorted(columns, key=lambda x: x.get('order', 999))
+        ]
+        df = df[display_names]
+
+        self.df = df
+        return self
+
     def to_csv(self, filepath: str, encoding: str = 'utf-8-sig') -> None:
         """CSVファイルに保存"""
         self.df.to_csv(filepath, index=False, encoding=encoding)
@@ -519,10 +583,16 @@ def export_to_csv(metrics_data: List[Dict[str, Any]], start_date: str, end_date:
         metrics_df = MetricsDataFrame(metrics_data, config)
 
         if config.is_evaluation_mode(output_mode):
-            # 評価付きモード: 専用の処理
-            (metrics_df.convert_units(time_unit)
-                       .sort_by_monitor()
-                       .format_for_evaluation_export())
+            # 評価付きモード: Excel形式か従来形式かを判定
+            if config.is_excel_format_enabled() and config.get_excel_format_mode() == 'excel':
+                # Excel形式での出力（独自ソートを使用）
+                (metrics_df.convert_units(time_unit)
+                           .format_for_evaluation_export_excel())
+            else:
+                # 従来の評価付きモード処理
+                (metrics_df.convert_units(time_unit)
+                           .sort_by_monitor()
+                           .format_for_evaluation_export())
         else:
             # 生データモード: 従来の処理
             (metrics_df.convert_units(time_unit)

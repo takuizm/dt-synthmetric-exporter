@@ -10,10 +10,12 @@ Dynatraceの合成モニタリング（Synthetic Monitoring）のメトリクス
 - 日付による柔軟な期間指定
 - 複数のエンコーディング対応（UTF-8 with BOM, Shift-JIS）
 - 時間単位の選択（ミリ秒/秒）
+- **評価モード**: メトリクス基準値に基づく合否判定機能
+- **Excel形式対応**: Excel貼り付け用の列配置で出力
 - 詳細なログ出力
 
 ## 必要条件
-- Python 3.8以上
+- Python 3.8以上（Python 3.13.4完全対応）
 - Dynatraceテナント
 - Dynatrace APIトークン（必要な権限: `entities.read`, `metrics.read`）
 
@@ -168,10 +170,77 @@ run.bat --start 20241201 --end 20241207 --tags "env:prod" --encoding sjis
 --start YYYYMMDD    取得開始日 (必須)
 --end YYYYMMDD      取得終了日 (必須)
 --tags TEXT         タグフィルター (例: "env:prod AND team:web")
+--output-mode       出力モード [standard/evaluation] (デフォルト: standard)
 --encoding          CSVエンコーディング [utf8-bom/sjis] (デフォルト: utf8-bom)
 --time-unit         時間単位 [ms/s] (デフォルト: ms)
 --verbose           詳細ログを表示
 ```
+
+## 出力モード
+
+### 標準モード（standard）
+すべてのメトリクスを統計値（Min/Max/Avg/Median/Stdev）と共に出力します。
+
+**使用例：**
+```bash
+./run.sh --start 20241201 --end 20241207
+# または明示的に指定
+./run.sh --start 20241201 --end 20241207 --output-mode standard
+```
+
+### 評価モード（evaluation）
+メトリクスの基準値に基づいて合否判定を行い、評価結果と平均値のみを出力します。
+
+**使用例：**
+```bash
+./run.sh --start 20241201 --end 20241207 --output-mode evaluation
+```
+
+**評価基準の設定：**
+`config/metrics.yaml`で各メトリクスの基準値を設定できます。
+
+**評価基準例：**
+- Action Duration: 2.0秒以下（通常基準）/ 1.0秒以下（厳格基準）
+- Largest Contentful Paint (LCP): 2.0秒以下
+- 稼働率: 99.9%以上
+- Cumulative Layout Shift (CLS): 0.1以下
+- Time to first byte: 0.2秒以下
+- Speed Index: 0.4秒以下
+
+**出力例：**
+```csv
+code,corporate,no,code+no,メトリクス名:説明,評価,AVG,URL,index,タグ
+,,,,"モニター名：Action Duration（表示速度）は2.0秒以下",1,1.8,,1,env:prod
+,,,,"モニター名：稼働率は99.9％以上",0,99.5,,2,env:prod
+```
+
+評価列の値：
+- `1`: 合格（基準値をクリア）
+- `0`: 不合格（基準値を超過）
+- `-1`: 基準値未設定
+
+### Excel形式対応
+評価モードでExcel貼り付け用の列配置で出力できます。
+
+**設定方法：**
+`config/metrics.yaml`で以下を設定：
+```yaml
+output_format_excel:
+  enabled: true
+  mode: "excel"
+```
+
+**Excel形式の列構成：**
+- Action Duration
+- Largest Contentful Paint（LCP）
+- 稼働率
+- Cumulative Layout Shift（CLS）
+- Time to first byte
+- Speed Index
+
+各行のメトリクスは該当する列にのみ値が入り、他の列は空欄になります。
+
+詳細は `docs/20250101_excel_format_test_v1.md` を参照してください。
 
 ## 出力ファイルの確認
 
@@ -297,7 +366,15 @@ dt-synthmetric-exporter/
 │   ├── __init__.py
 │   ├── export_synthetic_metrics.py  # メインスクリプト
 │   ├── dynatrace_client.py         # Dynatrace APIクライアント
+│   ├── config.py                   # 設定読み込み
 │   ├── helpers.py                  # ヘルパー関数
+├── config/
+│   └── metrics.yaml                # メトリクス設定・評価基準
+├── docs/                           # ドキュメント
+│   ├── dynatrace_synthetic_metrics_requirements_ja.md  # 初期要件定義
+│   ├── 20250101_excel_format_test_v1.md               # Excel形式実装報告
+│   ├── 20251031_bugfix_double_conversion_v1.md        # バグ修正レポート
+│   └── 20251031_pc_monitor_check_v1.md                # 調査報告
 ├── output/                         # CSVファイル出力ディレクトリ
 │   └── synthetic_metrics_*.csv     # 出力されるCSVファイル
 ├── logs/                          # ログファイル格納ディレクトリ

@@ -127,6 +127,10 @@ def main():
                     actual_time_unit = args.time_unit if hasattr(args, 'time_unit') and args.time_unit else default_time_unit
                     stats = client.calculate_statistics(data_points, metric_key, actual_time_unit)
 
+                    # デバッグ情報
+                    if args.verbose:
+                        logging.info(f"メトリクス: {metric_key}, データポイント数: {len(data_points)}, 統計値: {stats}")
+
                     # 評価値の選択（設定から取得）
                     eval_value_type = client.config.get_evaluation_value_type()
                     eval_value = stats.get(eval_value_type, stats.get('avg', 0))
@@ -157,16 +161,37 @@ def main():
 
                             # Action Duration用のCSV行データ作成
                             if client.config.is_evaluation_mode(args.output_mode):
+                                # モニター名からURL抽出（前"_"から後ろ"_"まで）
+                                monitor_name = monitor['name']
+                                url_match = re.search(r'_([^_]+)_', monitor_name)
+                                extracted_url = url_match.group(1) if url_match else ''
+
+                                # タグからCode値を抽出
+                                code_value = ''
+                                for tag in monitor.get('tags', []):
+                                    if tag['key'] == 'Code':
+                                        code_value = tag['value']
+                                        break
+
+                                # メトリクス名に対応するno値を取得
+                                metric_with_suffix = f"{metric_key}{display_suffix}"
+                                no_mapping = client.config.get_metric_no_mapping()
+                                no_value = no_mapping.get(metric_with_suffix, '')
+
+                                # code+no列の値を生成
+                                code_no_value = f"{code_value}{no_value}" if code_value and no_value else ''
+
                                 # 評価付きモード用のデータ構造
                                 action_row_data = {
-                                    'code': '',  # 空欄
+                                    'code': code_value,  # タグのCode値
                                     'corporate': '',  # 空欄
-                                    'no': '',  # 空欄
-                                    'code_no': '',  # 空欄
+                                    'no': no_value,  # メトリクス別のno値
+                                    'code_no': code_no_value,  # code+no
+                                    'monitor_name': monitor_name,  # モニター名
+                                    'url': extracted_url,  # 抽出したURL
                                     'metric_full_name': client.config.get_metric_full_name(f"{metric_key}{display_suffix}", description),
                                     'evaluation': criteria_evaluation,
                                     'avg': stats['avg'],
-                                    'url': '',  # 空欄
                                     'index': 0,  # 後で連番を設定
                                     'tags': ', '.join([f"{tag['key']}:{tag['value']}" for tag in monitor.get('tags', [])])
                                 }
@@ -191,16 +216,36 @@ def main():
                     else:
                         # 通常メトリクスのCSV行データ作成
                         if client.config.is_evaluation_mode(args.output_mode):
+                            # モニター名からURL抽出（前"_"から後ろ"_"まで）
+                            monitor_name = monitor['name']
+                            url_match = re.search(r'_([^_]+)_', monitor_name)
+                            extracted_url = url_match.group(1) if url_match else ''
+
+                            # タグからCode値を抽出
+                            code_value = ''
+                            for tag in monitor.get('tags', []):
+                                if tag['key'] == 'Code':
+                                    code_value = tag['value']
+                                    break
+
+                            # メトリクス名に対応するno値を取得
+                            no_mapping = client.config.get_metric_no_mapping()
+                            no_value = no_mapping.get(metric_key, '')
+
+                            # code+no列の値を生成
+                            code_no_value = f"{code_value}{no_value}" if code_value and no_value else ''
+
                             # 評価付きモード用のデータ構造
                             row_data = {
-                                'code': '',  # 空欄
+                                'code': code_value,  # タグのCode値
                                 'corporate': '',  # 空欄
-                                'no': '',  # 空欄
-                                'code_no': '',  # 空欄
+                                'no': no_value,  # メトリクス別のno値
+                                'code_no': code_no_value,  # code+no
+                                'monitor_name': monitor_name,  # モニター名
+                                'url': extracted_url,  # 抽出したURL
                                 'metric_full_name': client.config.get_metric_full_name(metric_key, client.get_metric_description(metric_key)),
                                 'evaluation': evaluation,
                                 'avg': stats['avg'],
-                                'url': '',  # 空欄
                                 'index': 0,  # 後で連番を設定
                                 'tags': ', '.join([f"{tag['key']}:{tag['value']}" for tag in monitor.get('tags', [])])
                             }

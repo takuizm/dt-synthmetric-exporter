@@ -404,3 +404,60 @@ class Config:
 
         # その他のメトリクスは値が基準値以下で合格
         return 1 if value <= threshold else 0
+
+    def get_csv_columns_evaluation_excel(self) -> List[Dict[str, Any]]:
+        """
+        Excel形式評価付きモード用CSV列定義を取得（順序付き）
+
+        Returns:
+            List[Dict[str, Any]]: Excel形式評価付きモード用列定義のリスト
+        """
+        columns = self.config.get('csv_columns_evaluation_excel', [])
+        return sorted(columns, key=lambda x: x.get('order', 999))
+
+    def get_excel_metric_column_mapping(self) -> Dict[str, str]:
+        """
+        メトリクスとExcel列の対応関係を取得
+
+        Returns:
+            Dict[str, str]: メトリクスキーと列キーのマッピング
+        """
+        return self.config.get('excel_metric_column_mapping', {})
+
+    def is_excel_format_enabled(self) -> bool:
+        """
+        Excel形式が有効かどうかを判定
+
+        Returns:
+            bool: Excel形式が有効な場合True
+        """
+        excel_config = self.config.get('output_format_excel', {})
+        return excel_config.get('enabled', False)
+
+    def get_excel_format_mode(self) -> str:
+        """
+        Excel形式のモードを取得
+
+        Returns:
+            str: Excel形式のモード（"standard" または "excel"）
+        """
+        excel_config = self.config.get('output_format_excel', {})
+        return excel_config.get('mode', 'standard')
+
+    def get_excel_metric_order(self) -> List[Dict[str, Any]]:
+        """
+        Excel形式専用のメトリクス順序定義を取得
+
+        Returns:
+            List[Dict[str, Any]]: Excel形式のメトリクス順序定義
+        """
+        return self.config.get('excel_metric_order', [])
+
+    def get_metric_no_mapping(self) -> Dict[str, str]:
+        """
+        メトリクス別no値マッピングを取得
+
+        Returns:
+            Dict[str, str]: メトリクス名をキーとしたno値のマッピング
+        """
+        return self.config.get('metric_no_mapping', {})

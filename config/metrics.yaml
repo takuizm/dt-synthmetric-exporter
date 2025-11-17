@@ -183,6 +183,8 @@ time_metrics_keywords:
   - response
   - event
   - index
+  - byte        # TTFB用（firstByte.load）
+  - paint       # LCP用（largestContentfulPaint.load）
 
 # 評価基準値設定
 evaluation_criteria:
@@ -337,3 +339,94 @@ csv_columns_evaluation:
     display_name: "タグ"
     order: 10
     description: "モニターに設定されたタグ"
+
+# Excel形式用CSV列定義
+csv_columns_evaluation_excel:
+  - key: "code"
+    display_name: "code"
+    order: 1
+    description: "将来の拡張用（現在は空欄）"
+  - key: "corporate"
+    display_name: "corporate"
+    order: 2
+    description: "将来の拡張用（現在は空欄）"
+  - key: "no"
+    display_name: "no"
+    order: 3
+    description: "将来の拡張用（現在は空欄）"
+  - key: "code_no"
+    display_name: "code+no"
+    order: 4
+    description: "将来の拡張用（現在は空欄）"
+  - key: "action_duration_value"
+    display_name: "Action Duration"
+    order: 5
+    description: "Action Duration の実測値"
+  - key: "lcp_value"
+    display_name: "Largest Contentful Paint（LCP）"
+    order: 6
+    description: "LCP の実測値"
+  - key: "availability_value"
+    display_name: "稼働率"
+    order: 7
+    description: "稼働率 の実測値"
+  - key: "cls_value"
+    display_name: "Cumulative Layout Shift（CLS）"
+    order: 8
+    description: "CLS の実測値"
+  - key: "ttfb_value"
+    display_name: "Time to first byte"
+    order: 9
+    description: "Time to first byte の実測値"
+  - key: "speed_index_value"
+    display_name: "Speed Index"
+    order: 10
+    description: "Speed Index の実測値"
+
+# メトリクスとExcel列の対応関係
+excel_metric_column_mapping:
+  "builtin:synthetic.browser.actionDuration.load": "action_duration_value"
+  "builtin:synthetic.browser.largestContentfulPaint.load": "lcp_value"
+  "builtin:synthetic.browser.availability": "availability_value"
+  "builtin:synthetic.browser.cumulativeLayoutShift.load": "cls_value"
+  "builtin:synthetic.browser.firstByte.load": "ttfb_value"
+  "builtin:synthetic.browser.speedIndex.load": "speed_index_value"
+
+# Excel形式の有効化設定
+output_format_excel:
+  enabled: true
+  mode: "excel"  # "standard" または "excel"
+
+# Excel形式専用のメトリクス順序定義
+excel_metric_order:
+  - metric_pattern: "actionDuration.load（1）"
+    order: 1
+    description: "Action Duration（表示速度）は2.0秒以下"
+  - metric_pattern: "actionDuration.load（2）"
+    order: 2
+    description: "Action Duration（表示速度）は1.0秒以下"
+  - metric_pattern: "largestContentfulPaint.load"
+    order: 3
+    description: "Largest Contentful Paint（LCP）は2.0秒以下"
+  - metric_pattern: "availability"
+    order: 4
+    description: "稼働率：計測期間中の稼働率は99.9％以上"
+  - metric_pattern: "cumulativeLayoutShift.load"
+    order: 5
+    description: "Cumulative Layout Shift（CLS）は0.1秒以下"
+  - metric_pattern: "firstByte.load"
+    order: 6
+    description: "Time to first byteは0.2秒以下"
+  - metric_pattern: "speedIndex.load"
+    order: 7
+    description: "Speed Indexは0.4秒以下"
+
+# メトリクス別no値マッピング
+metric_no_mapping:
+  "builtin:synthetic.browser.actionDuration.load（1）": "10"
+  "builtin:synthetic.browser.actionDuration.load（2）": "20"
+  "builtin:synthetic.browser.largestContentfulPaint.load": "30"
+  "builtin:synthetic.browser.availability": "40"
+  "builtin:synthetic.browser.cumulativeLayoutShift.load": "50"
+  "builtin:synthetic.browser.firstByte.load": "60"
+  "builtin:synthetic.browser.speedIndex.load": "70"
